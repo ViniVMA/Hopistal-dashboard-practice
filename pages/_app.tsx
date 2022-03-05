@@ -9,10 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <div className="gradient-bg-welcome">
           <Header />
 
-          <div
-            className="max-w-7xl m-auto "
-            style={{ border: "1px solid lime" }}
-          >
+          <div className="max-w-7xl m-auto ">
             <Component {...pageProps} />
           </div>
         </div>
