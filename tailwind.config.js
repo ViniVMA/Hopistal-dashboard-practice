@@ -4,6 +4,27 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  theme: {
+    extend: {
+      maxHeight: {
+        128: "37.5rem",
+      },
+      maxWidth: {
+        128: "37.5rem",
+        "1/2": "50%",
+      },
+      spacing: {
+        "1.5/2": "40%",
+      },
+      zIndex: {
+        higher: "9999",
+      },
+      backdropFilter: {
+        none: "none",
+        blur: "blur(20px)",
+      },
+    },
+  },
   daisyui: {
     styled: true,
     themes: true,
