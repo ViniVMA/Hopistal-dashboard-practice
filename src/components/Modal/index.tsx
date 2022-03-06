@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { useEffect, useState } from "react";
+
 interface ModalProps {
   handleModalOpen: () => void;
   isModalOpen?: boolean;
@@ -38,6 +40,15 @@ export const Modal = ({
   number,
   country,
 }: ModalProps) => {
+  const [ogUrl, setOgUrl] = useState("");
+
+  useEffect(() => {
+    const host = window.location.host;
+    const baseUrl = `https://${host}`;
+
+    setOgUrl(baseUrl);
+  }, []);
+
   return (
     <label
       onClick={handleModalOpen}
@@ -76,7 +87,10 @@ export const Modal = ({
             </span>
             <br />
             <br />
-            <span className="text-center">URL: {url} </span>
+            <span className="text-center border-2 border-purple-600 cursor-text rounded-full">
+              URL: {ogUrl}
+              {url}
+            </span>
           </div>
         </div>
       </label>

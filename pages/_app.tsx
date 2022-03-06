@@ -9,8 +9,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       <div className="min-h-screen">
         <div className="gradient-bg-welcome">
           <Header />
-          <div className="max-w-7xl m-auto ">
-            <Component {...pageProps} />
+          <div className="max-w-7xl pt-20 m-auto">
+            <Component className="mt-20" {...pageProps} />
           </div>
         </div>
       </div>

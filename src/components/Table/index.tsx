@@ -1,9 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import axios from "axios";
 import Link from "next/link";
-import router, { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
-import { useFetch } from "../../../hooks/useFetch";
+import { useRouter } from "next/router";
+import { SetStateAction, useContext, useEffect, useState } from "react";
 import { PacientsContext } from "../../../Providers/pacientsContext";
 import { Modal } from "../Modal";
 
@@ -12,9 +10,14 @@ export const Table = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState<any | null>(null);
-  const [visiblePacients, setVisiblePacients] = useState(10);
+  const [visiblePacients, setVisiblePacients] = useState(15);
+  const [genderFilter, setGenderFilter] = useState("");
 
   const router = useRouter();
+
+  const handleGenderFilter = (gender: SetStateAction<string>) => {
+    setGenderFilter(gender);
+  };
 
   const handleModalOpen = () => {
     setIsModalOpen(modalData !== null ? !isModalOpen : !isModalOpen);
@@ -36,7 +39,40 @@ export const Table = () => {
             <tr>
               <th>
                 <label>
-                  <input type="checkbox" className="checkbox" />
+                  <div className="dropdown">
+                    <label tabIndex={0} className="btn btn-primary m-1">
+                      Filtro
+                    </label>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                    >
+                      <button
+                        className="border-2 border-indigo-700 hover:bg-primary"
+                        onClick={() => handleGenderFilter("")}
+                      >
+                        Desativar Filtro
+                      </button>
+                      <li onClick={() => handleGenderFilter("male")}>
+                        <a className="flex justify-between">
+                          <span>female</span>
+                          <input
+                            type="checkbox"
+                            className="checkbox checkbox-primary"
+                          />
+                        </a>
+                      </li>
+                      <li onClick={() => handleGenderFilter("female")}>
+                        <a className="flex justify-between">
+                          <span>male</span>
+                          <input
+                            type="checkbox"
+                            className="checkbox checkbox-primary"
+                          />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </label>
               </th>
               <th>Name</th>
@@ -48,7 +84,12 @@ export const Table = () => {
           <tbody>
             {user?.slice(0, visiblePacients).map((user) => {
               return (
-                <tr key={user.login.uuid} id={user.login.uuid}>
+                <tr
+                  className={`${user.gender === genderFilter ? "hidden" : ""}
+                  `}
+                  key={user.login.uuid}
+                  id={user.login.uuid}
+                >
                   <td>
                     <div className="flex items-center space-x-3">
                       <div className="avatar">
@@ -67,7 +108,7 @@ export const Table = () => {
                     <span
                       className={`badge badge-ghost badge-sm capitalize ${
                         user.gender === "female"
-                          ? "bg-pink-800 "
+                          ? "bg-pink-800"
                           : "bg-green-800"
                       }`}
                     >
@@ -75,7 +116,7 @@ export const Table = () => {
                     </span>
                   </td>
 
-                  <td>
+                  <td className="">
                     {new Date(user.dob.date).toUTCString().slice(5, 17)}
                     <br />
                     <span className="badge badge-ghost badge-sm capitalize">
@@ -103,21 +144,25 @@ export const Table = () => {
               );
             })}
           </tbody>
-          <button onClick={() => setVisiblePacients(visiblePacients + 10)}>
-            aaaaa
-          </button>
         </table>
+        <div className="w-full flex justify-center">
+          <button
+            className="btn btn-primary mt-3"
+            onClick={() => setVisiblePacients(visiblePacients + 5)}
+          >
+            Carregar Mais...
+          </button>
+        </div>
       </div>
       <Modal
         picture={modalData?.picture.large}
         first={modalData?.name.first}
         last={modalData?.name.last}
         email={modalData?.email}
-        address="1"
         gender={modalData?.gender}
         id={modalData?.login.uuid}
         phone={modalData?.phone}
-        url="random"
+        url={`/post/${modalData?.login.uuid}`}
         nacionality={modalData?.nat}
         country={modalData?.location.country}
         state={modalData?.location.state}
