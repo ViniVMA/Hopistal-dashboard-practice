@@ -53,7 +53,7 @@ export const PacientsProvider = ({ children }: PacientsProviderProps) => {
   const handleRefetch = async () => {
     await setRefetchData(refetchData + 10);
     refetch();
-
+   };
   return (
     <PacientsContext.Provider value={{ user, handleRefetch }}>
       {children}
