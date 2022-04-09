@@ -6,11 +6,10 @@ import { PacientsContext } from "../../../Providers/pacientsContext";
 import { Modal } from "../Modal";
 
 export const Table = () => {
-  const user = useContext(PacientsContext);
+  const { user, handleRefetch } = useContext(PacientsContext);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState<any | null>(null);
-  const [visiblePacients, setVisiblePacients] = useState(15);
   const [genderFilter, setGenderFilter] = useState("");
 
   const router = useRouter();
@@ -47,13 +46,22 @@ export const Table = () => {
                       tabIndex={0}
                       className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
                     >
-                      <button
+                      {/* <button
                         className="border-2 border-indigo-700 hover:bg-primary"
                         onClick={() => handleGenderFilter("")}
                       >
                         Desativar Filtro
-                      </button>
-                      <li onClick={() => handleGenderFilter("male")}>
+                      </button> */}
+                      <li
+                        style={{
+                          display: genderFilter === "female" ? "none" : "block",
+                        }}
+                        onClick={() =>
+                          handleGenderFilter(
+                            genderFilter === "male" ? "" : "male",
+                          )
+                        }
+                      >
                         <a className="flex justify-between">
                           <span>female</span>
                           <input
@@ -62,7 +70,16 @@ export const Table = () => {
                           />
                         </a>
                       </li>
-                      <li onClick={() => handleGenderFilter("female")}>
+                      <li
+                        style={{
+                          display: genderFilter === "male" ? "none" : "block",
+                        }}
+                        onClick={() =>
+                          handleGenderFilter(
+                            genderFilter === "female" ? "" : "female",
+                          )
+                        }
+                      >
                         <a className="flex justify-between">
                           <span>male</span>
                           <input
@@ -82,7 +99,7 @@ export const Table = () => {
             </tr>
           </thead>
           <tbody>
-            {user?.slice(0, visiblePacients).map((user) => {
+            {user?.map((user: any) => {
               return (
                 <tr
                   className={`${user.gender === genderFilter ? "hidden" : ""}
@@ -148,7 +165,10 @@ export const Table = () => {
         <div className="w-full flex justify-center">
           <button
             className="btn btn-primary mt-3"
-            onClick={() => setVisiblePacients(visiblePacients + 5)}
+            onClick={() => {
+              handleRefetch();
+              console.log();
+            }}
           >
             Carregar Mais...
           </button>

@@ -11,8 +11,16 @@ export function useFetch<T = unknown>(url: string) {
     axios
       .get(url)
       .then((response) => setData(response.data.results))
-      .then(() => setLoading(!loading));
-  }, []);
+      .then(() => setLoading(false));
+  }, [url]);
 
-  return { data };
+  const refetch = () => {
+    console.log("refetch");
+    // axios
+    //   .get(url)
+    //   .then((response) => setData(response.data.results))
+    //   .then(() => setLoading(false));
+  };
+
+  return { data, refetch };
 }

@@ -2,6 +2,8 @@ import { createContext, ReactNode, useState } from "react";
 import { useFetch } from "../hooks/useFetch";
 
 interface Users {
+  refetch: () => void;
+
   setCallNumber: number;
   email: string;
   name: {
@@ -39,14 +41,28 @@ interface PacientsProviderProps {
   children: ReactNode;
 }
 
-export const PacientsContext = createContext<Users[] | null>([]);
+export const PacientsContext = createContext<any>([]);
 
 export const PacientsProvider = ({ children }: PacientsProviderProps) => {
-  const { data: user } = useFetch<Users[]>(
-    `https://randomuser.me/api/?results=200`,
+  const [refetchData, setRefetchData] = useState(10);
+
+  const { data: user, refetch } = useFetch<Users[]>(
+    `https://randomuser.me/api/?results=${refetchData}`,
   );
 
+  const handleRefetch = async () => {
+    console.log("before async");
+    console.log(refetchData);
+    await setRefetchData(refetchData + 10);
+    console.log(refetchData);
+
+    refetch();
+    console.log("after refetch");
+  };
+
   return (
-    <PacientsContext.Provider value={user}>{children}</PacientsContext.Provider>
+    <PacientsContext.Provider value={{ user, handleRefetch }}>
+      {children}
+    </PacientsContext.Provider>
   );
 };
