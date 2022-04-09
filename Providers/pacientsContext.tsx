@@ -51,14 +51,8 @@ export const PacientsProvider = ({ children }: PacientsProviderProps) => {
   );
 
   const handleRefetch = async () => {
-    console.log("before async");
-    console.log(refetchData);
     await setRefetchData(refetchData + 10);
-    console.log(refetchData);
-
     refetch();
-    console.log("after refetch");
-  };
 
   return (
     <PacientsContext.Provider value={{ user, handleRefetch }}>
